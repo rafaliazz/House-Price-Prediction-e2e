@@ -1,0 +1,12 @@
+mlflow.db 
+/artifacts
+# Ignore virtual environments
+.conda/
+venv/
+env/
+.venv/
+
+# Ignore Python artifacts
+__pycache__/
+*.pyc
+*.pkl

@@ -1,0 +1,34 @@
+services:
+  api:
+    image: house_e2e
+    container_name: house_api
+    command: uvicorn api.main:app --host 0.0.0.0 --port 8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    restart: unless-stopped
+
+  monitor:
+    image: house_e2e
+    container_name: house_monitor
+    command: python src/monitor/monitor.py
+    volumes:
+      - .:/app
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  streamlit:
+    image: house_e2e
+    container_name: house_streamlit
+    command: streamlit run src/app.py --server.port=8501 --server.address=0.0.0.0
+    ports:
+      - "8501:8501"
+    environment:
+      - API_URL=http://api:8000  
+    volumes:
+      - .:/app
+    depends_on:
+      - api
+    restart: unless-stopped
